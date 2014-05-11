@@ -1,0 +1,65 @@
+import java.io.FileOutputStream;
+
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+
+public class GeneratePDF {
+
+	public static void main(String[] args) {
+		
+		Document document = new Document();
+		
+		try {
+			PdfWriter.getInstance(document, new FileOutputStream("Deck.pdf"));
+			
+			document.open();
+			PdfPTable table = new PdfPTable(4);
+			table.setWidthPercentage(80);
+            table.getDefaultCell().setFixedHeight(100);
+           
+            BaseFont baseFont = BaseFont.createFont("c:/windows/fonts/times.ttf", BaseFont.IDENTITY_H, true);
+            Font black = new Font(baseFont, 40f, 0, BaseColor.BLACK);
+            Font red = new Font(baseFont, 40f, 0, BaseColor.RED);
+			
+            String[] smallCards={"2","3","4","5","6","7","8","9","10"};
+    		String[]bigCards={"J","Q","K","A"};
+    		String[] blackSuit={"♠","♣"};
+    		String[] redSuit={"♥","♦"};
+    		
+    		for (int i = 0; i < smallCards.length; i++) {
+				for (int j = 0; j <blackSuit.length; j++) {					
+					table.addCell(new Paragraph("  "+smallCards[i]+blackSuit[j],black));
+						for (int k = j; k <redSuit.length; k+=2) {
+							table.addCell(new Paragraph("  "+smallCards[i]+redSuit[k]+" ",red));							
+						}
+				}
+			}  			
+    		for (int i = 0; i < bigCards.length; i++) {
+				for (int j = 0; j <blackSuit.length; j++) {					
+					table.addCell(new Paragraph("  "+bigCards[i]+blackSuit[j],black));
+						for (int k = j; k <redSuit.length; k+=2) {
+							table.addCell(new Paragraph("  "+bigCards[i]+redSuit[k],red));							
+						}
+				}
+			}
+    		
+    		document.add(table);
+            document.close();
+            
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+
+	}
+
+	
+}
